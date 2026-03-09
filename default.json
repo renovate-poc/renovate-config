@@ -1,11 +1,19 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
+  "ignorePaths": [],
   "dependencyDashboard": true,
-  "enabledManagers": ["terraform", "terraform-version"],
-  "schedule": ["at any time"],
+  "semanticCommits": "enabled",
+  "semanticCommitScope": "deps",
+  "schedule": ["before 5am on Monday", "before 5am on Wednesday"],
+  "timezone": "Europe/Madrid",
   "rebaseWhen": "conflicted",
+  "minimumReleaseAge": "3 days",
   "labels": ["dependencies", "renovate"],
+  "separateMajorMinor" : true,
+  "enabledManagers": ["terraform", "terraform-version"],
+  "prHourlyLimit": 100,
+  "gitIgnoredAuthors": ["terraform-lockfile-automation"],
   "terraform": {
     "enabled": true,
     "pinDigests": false,
@@ -14,15 +22,180 @@
   "packageRules": [
     {
       "groupName": "Terraform modules",
+      "labels": ["terraform", "modules"],
+      "additionalBranchPrefix": "tf-modules-",
       "matchManagers": ["terraform"],
       "matchDepTypes": ["module"],
       "matchDatasources": ["terraform-module", "github-tags"]
     },
     {
       "groupName": "Terraform providers",
+      "labels": ["terraform", "providers"],
+      "additionalBranchPrefix": "tf-providers-",
       "matchManagers": ["terraform"],
       "matchDepTypes": ["required_provider"],
       "matchDatasources": ["terraform-provider"]
+    },
+    {
+      "groupName": "Terraform version",
+      "labels": ["terraform", "required-version"],
+      "additionalBranchPrefix": "tf-version-",
+      "matchManagers": ["terraform-version", "terraform"],
+      "matchDepTypes": ["required_version"]
+    },
+    {
+      "matchManagers": ["terraform"],
+      "matchDatasources": ["github-tags"],
+      "matchPackageNames": ["MewsSystems/tf-module-atlas-service-container-app"],
+      "enabled": true,
+      "groupName": "Terraform modules",
+      "minimumReleaseAge": "7 days"
+    },
+    {
+      "matchManagers": ["terraform"],
+      "matchDatasources": ["github-tags"],
+      "matchPackageNames": ["MewsSystems/tf-module-pla-common"],
+      "enabled": true,
+      "groupName": "Terraform modules"
+    },
+    {
+      "matchManagers": ["terraform"],
+      "matchDatasources": ["github-tags"],
+      "matchPackageNames": ["MewsSystems/tf-module-azurerm-container-app"],
+      "enabled": true,
+      "groupName": "Terraform modules"
+    },
+    {
+      "matchManagers": ["terraform"],
+      "matchDatasources": ["github-tags"],
+      "matchPackageNames": ["MewsSystems/tf-module-azure-blob-storage"],
+      "enabled": true,
+      "groupName": "Terraform modules"
+    },
+    {
+      "matchManagers": ["terraform"],
+      "matchDatasources": ["github-tags"],
+      "matchPackageNames": ["MewsSystems/tf-module-azurerm-redis"],
+      "enabled": true,
+      "groupName": "Terraform modules"
+    },
+    {
+      "matchManagers": ["terraform"],
+      "matchDatasources": ["github-tags"],
+      "matchPackageNames": ["MewsSystems/tf-module-azurerm-keyvault"],
+      "enabled": true,
+      "groupName": "Terraform modules"
+    },
+    {
+      "matchManagers": ["terraform"],
+      "matchDatasources": ["github-tags"],
+      "matchPackageNames": ["MewsSystems/tf-module-s2s-auth"],
+      "enabled": true,
+      "groupName": "Terraform modules"
+    },
+    {
+      "matchManagers": ["terraform"],
+      "matchDatasources": ["github-tags"],
+      "matchPackageNames": ["MewsSystems/tf-module-azure-app-configuration"],
+      "enabled": true,
+      "groupName": "Terraform modules"
+    },
+    {
+      "matchManagers": ["terraform"],
+      "matchDatasources": ["github-tags"],
+      "matchPackageNames": ["MewsSystems/tf-module-azure-sql-server"],
+      "enabled": true,
+      "groupName": "Terraform modules"
+    },
+    {
+      "matchManagers": ["terraform"],
+      "matchDatasources": ["terraform-module"],
+      "matchPackageNames": ["Azure/avm-utl-regions/azurerm"],
+      "enabled": true,
+      "groupName": "Terraform modules"
+    },
+    {
+      "matchManagers": ["terraform"],
+      "matchDatasources": ["terraform-module"],
+      "matchPackageNames": ["Azure/avm-res-app-containerapp/azurerm"],
+      "enabled": true,
+      "groupName": "Terraform modules"
+    },
+    {
+      "matchManagers": ["terraform"],
+      "matchDatasources": ["terraform-module"],
+      "matchPackageNames": ["Azure/avm-res-storage-storageaccount/azurerm"],
+      "enabled": true,
+      "groupName": "Terraform modules"
+    },
+    {
+      "matchManagers": ["terraform"],
+      "matchDatasources": ["terraform-module"],
+      "matchPackageNames": ["Azure/avm-res-cache-redis/azurerm"],
+      "enabled": true,
+      "groupName": "Terraform modules"
+    },
+    {
+      "matchManagers": ["terraform"],
+      "matchDatasources": ["terraform-module"],
+      "matchPackageNames": ["Azure/avm-res-keyvault-vault/azurerm"],
+      "enabled": true,
+      "groupName": "Terraform modules"
+    },
+    {
+      "matchManagers": ["terraform"],
+      "matchDatasources": ["terraform-module"],
+      "matchPackageNames": ["Azure/avm-res-sql-server/azurerm"],
+      "enabled": true,
+      "groupName": "Terraform modules"
+    },
+    {
+      "matchManagers": ["terraform-version", "terraform"],
+      "matchDatasources": ["github-releases", "terraform-version"],
+      "matchDepNames": ["hashicorp/terraform"],
+      "enabled": true,
+      "groupName": "Terraform version"
+    },
+    {
+      "matchManagers": ["terraform-version"],
+      "matchFiles": ["**/.terraform-version"],
+      "enabled": true,
+      "groupName": "Terraform version",
+      "labels": ["terraform", "tfenv"],
+      "additionalBranchPrefix": "tfenv-",
+      "rangeStrategy": "replace",
+      "allowedVersions": ">1.12.0",
+      "commitMessageTopic": "terraform version (.terraform-version)"
+    },
+    {
+      "matchManagers": ["terraform"],
+      "matchDatasources": ["terraform-provider"],
+      "matchPackageNames": ["hashicorp/azurerm"],
+      "enabled": true,
+      "groupName": "Terraform providers"
+    },
+    {
+      "matchManagers": ["terraform"],
+      "matchDatasources": ["terraform-provider"],
+      "matchPackageNames": ["Azure/azapi"],
+      "enabled": true,
+      "groupName": "Terraform providers"
+    },
+    {
+      "matchManagers": ["terraform"],
+      "matchDatasources": ["terraform-provider"],
+      "matchPackageNames": ["hashicorp/azuread"],
+      "enabled": true,
+      "groupName": "Terraform providers"
     }
-  ]
+  ],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 5am on monday"],
+    "commitMessageAction": "regenerate",
+    "commitMessageTopic": "terraform lock files",
+    "semanticCommitType": "chore",
+    "semanticCommitScope": "terraform",
+    "labels": ["dependencies", "renovate", "terraform", "lock-files"]
+  }
 }
