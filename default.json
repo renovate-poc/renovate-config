@@ -1,0 +1,28 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "dependencyDashboard": true,
+  "enabledManagers": ["terraform", "terraform-version"],
+  "schedule": ["at any time"],
+  "rebaseWhen": "conflicted",
+  "labels": ["dependencies", "renovate"],
+  "terraform": {
+    "enabled": true,
+    "pinDigests": false,
+    "rangeStrategy": "replace"
+  },
+  "packageRules": [
+    {
+      "groupName": "Terraform modules",
+      "matchManagers": ["terraform"],
+      "matchDepTypes": ["module"],
+      "matchDatasources": ["terraform-module", "github-tags"]
+    },
+    {
+      "groupName": "Terraform providers",
+      "matchManagers": ["terraform"],
+      "matchDepTypes": ["required_provider"],
+      "matchDatasources": ["terraform-provider"]
+    }
+  ]
+}
